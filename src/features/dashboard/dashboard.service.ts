@@ -1,4 +1,5 @@
 import { supabase } from "../../lib/supabase/client";
+import { getEffectiveStatus, isExpired } from "../../lib/request-status";
 import type { PaymentRequest, RequestStatus } from "../../lib/types";
 
 type PaymentRequestRow = {
@@ -20,7 +21,9 @@ type PaymentRequestRow = {
   canceled_at: string | null;
 };
 
-function mapRequest(row: PaymentRequestRow): PaymentRequest {
+export function mapRequest(row: PaymentRequestRow): PaymentRequest {
+  const status = getEffectiveStatus(row.status, row.expires_at);
+
   return {
     id: row.id,
     senderUserId: row.sender_user_id,
@@ -30,7 +33,7 @@ function mapRequest(row: PaymentRequestRow): PaymentRequest {
     amountMinor: row.amount_minor,
     currency: row.currency,
     note: row.note,
-    status: row.status,
+    status,
     shareToken: row.share_token,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -39,6 +42,21 @@ function mapRequest(row: PaymentRequestRow): PaymentRequest {
     declinedAt: row.declined_at,
     canceledAt: row.canceled_at,
   };
+}
+
+async function reconcileExpiredRequests(rows: PaymentRequestRow[]) {
+  const expiredPendingIds = rows
+    .filter((row) => row.status === "pending" && isExpired(row.expires_at))
+    .map((row) => row.id);
+
+  if (expiredPendingIds.length === 0) {
+    return;
+  }
+
+  await supabase
+    .from("payment_requests")
+    .update({ status: "expired" })
+    .in("id", expiredPendingIds);
 }
 
 export async function listOutgoingRequests(senderEmail: string) {
@@ -52,5 +70,39 @@ export async function listOutgoingRequests(senderEmail: string) {
     throw error;
   }
 
-  return ((data ?? []) as PaymentRequestRow[]).map(mapRequest);
+  const rows = (data ?? []) as PaymentRequestRow[];
+  await reconcileExpiredRequests(rows);
+  return rows.map(mapRequest);
+}
+
+export async function listIncomingRequests(email: string, userId: string) {
+  const { data, error } = await supabase
+    .from("payment_requests")
+    .select("*")
+    .or(`recipient_contact.eq.${email},recipient_user_id.eq.${userId}`)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  const rows = (data ?? []) as PaymentRequestRow[];
+  await reconcileExpiredRequests(rows);
+  return rows.map(mapRequest);
+}
+
+export async function getRequestByShareToken(shareToken: string) {
+  const { data, error } = await supabase
+    .from("payment_requests")
+    .select("*")
+    .eq("share_token", shareToken)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  const row = data as PaymentRequestRow;
+  await reconcileExpiredRequests([row]);
+  return mapRequest(row);
 }
