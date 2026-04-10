@@ -111,7 +111,7 @@ export function RequestDetailPage() {
   if (isLoading || isFetching) {
     return (
       <section className="panel">
-        <h2>Loading request…</h2>
+        <h2>Loading request...</h2>
         <p className="muted">Fetching the latest request detail and status.</p>
       </section>
     );
@@ -194,6 +194,30 @@ export function RequestDetailPage() {
           Recipients can pay or decline pending requests. Senders can cancel their
           own pending requests.
         </p>
+
+        {request.status === "expired" ? (
+          <div className="inline-banner inline-banner--warning">
+            This request expired and can no longer be paid, declined, or canceled.
+          </div>
+        ) : null}
+
+        {request.status === "paid" ? (
+          <div className="inline-banner inline-banner--success">
+            This request has already been paid.
+          </div>
+        ) : null}
+
+        {request.status === "declined" ? (
+          <div className="inline-banner inline-banner--warning">
+            This request has already been declined.
+          </div>
+        ) : null}
+
+        {request.status === "canceled" ? (
+          <div className="inline-banner inline-banner--warning">
+            This request has already been canceled.
+          </div>
+        ) : null}
 
         <RequestActions
           actorEmail={email}

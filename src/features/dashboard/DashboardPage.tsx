@@ -4,7 +4,9 @@ import { useAuth } from "../../app/auth-context";
 import { StatusBadge } from "../../components/StatusBadge";
 import { formatMoney } from "../../lib/money/amount";
 import { getTimeRemaining } from "../../lib/request-status";
-import type { PaymentRequest } from "../../lib/types";
+import type { PaymentRequest, RequestStatus } from "../../lib/types";
+import { DashboardFilters } from "./DashboardFilters";
+import { filterRequests } from "./dashboard.filters";
 import { listIncomingRequests, listOutgoingRequests } from "./dashboard.service";
 
 function RequestCard({
@@ -35,6 +37,8 @@ export function DashboardPage() {
   const { email, userId, isAuthenticated, isLoading } = useAuth();
   const [outgoingRequests, setOutgoingRequests] = useState<PaymentRequest[]>([]);
   const [incomingRequests, setIncomingRequests] = useState<PaymentRequest[]>([]);
+  const [search, setSearch] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<"all" | RequestStatus>("all");
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -81,6 +85,18 @@ export function DashboardPage() {
     };
   }, [email, isAuthenticated, userId]);
 
+  const filteredOutgoingRequests = filterRequests(outgoingRequests, {
+    search,
+    selectedStatus,
+    role: "outgoing",
+  });
+
+  const filteredIncomingRequests = filterRequests(incomingRequests, {
+    search,
+    selectedStatus,
+    role: "incoming",
+  });
+
   return (
     <section className="dashboard-stack">
       <article className="panel">
@@ -109,6 +125,25 @@ export function DashboardPage() {
         )}
       </article>
 
+      <article className="panel">
+        <div className="panel__heading">
+          <div>
+            <p className="eyebrow">Filters</p>
+            <h2>Search and status refinement</h2>
+          </div>
+          <p className="muted">
+            Use one set of filters across both incoming and outgoing request lists.
+          </p>
+        </div>
+
+        <DashboardFilters
+          onSearchChange={setSearch}
+          onStatusChange={setSelectedStatus}
+          search={search}
+          selectedStatus={selectedStatus}
+        />
+      </article>
+
       <section className="dashboard-grid">
         <article className="panel">
           <div className="panel__heading">
@@ -124,14 +159,18 @@ export function DashboardPage() {
           {isFetching ? <p className="muted">Loading outgoing requests...</p> : null}
           {error ? <p className="error-text">{error}</p> : null}
 
-          {!isFetching && !error && outgoingRequests.length === 0 ? (
+          {!isFetching && !error && filteredOutgoingRequests.length === 0 ? (
             <div className="empty-state">
-              <p className="muted">No outgoing requests yet. Create your first one.</p>
+              <p className="muted">
+                {outgoingRequests.length === 0
+                  ? "No outgoing requests yet. Create your first one."
+                  : "No outgoing requests match the current filters."}
+              </p>
             </div>
           ) : null}
 
           <div className="request-list">
-            {outgoingRequests.map((request) => (
+            {filteredOutgoingRequests.map((request) => (
               <RequestCard key={request.id} label="Recipient" request={request} />
             ))}
           </div>
@@ -149,16 +188,18 @@ export function DashboardPage() {
           {isFetching ? <p className="muted">Loading incoming requests...</p> : null}
           {error ? <p className="error-text">{error}</p> : null}
 
-          {!isFetching && !error && incomingRequests.length === 0 ? (
+          {!isFetching && !error && filteredIncomingRequests.length === 0 ? (
             <div className="empty-state">
               <p className="muted">
-                No incoming requests match your signed-in email yet.
+                {incomingRequests.length === 0
+                  ? "No incoming requests match your signed-in email yet."
+                  : "No incoming requests match the current filters."}
               </p>
             </div>
           ) : null}
 
           <div className="request-list">
-            {incomingRequests.map((request) => (
+            {filteredIncomingRequests.map((request) => (
               <RequestCard key={request.id} label="Sender" request={request} />
             ))}
           </div>

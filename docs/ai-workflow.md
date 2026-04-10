@@ -124,6 +124,19 @@ This file captures representative prompts and AI-assisted workflow notes used to
 - Expiration-aware status handling and countdown added
 - Lifecycle actions connected back to request status updates
 
+### 9. Filtering, Search, and Expiration Refinement
+
+**Prompt intent**: Refine the management experience so users can actually navigate larger request lists and better understand terminal request states.
+
+**Representative prompt**:
+> Alright lets go, step 9
+
+**Outcome**:
+- Dashboard search added across request counterpart and note text
+- Status filtering added for incoming and outgoing request lists
+- Empty states improved when filters return no matches
+- Request detail messaging improved for expired, paid, declined, and canceled states
+
 ## Notes on AI Process
 
 - AI was used as a structured implementation partner, not as a blind code generator.
