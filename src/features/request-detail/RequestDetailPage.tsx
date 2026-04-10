@@ -108,6 +108,11 @@ export function RequestDetailPage() {
     }
   }
 
+  async function copyShareToken(shareToken: string) {
+    await navigator.clipboard.writeText(shareToken);
+    setSuccessMessage("Share token copied.");
+  }
+
   if (isLoading || isFetching) {
     return (
       <section className="panel">
@@ -175,9 +180,22 @@ export function RequestDetailPage() {
             <p className="request-card__label">Created</p>
             <strong>{new Date(request.createdAt).toLocaleString()}</strong>
           </div>
-          <div>
-            <p className="request-card__label">Share token</p>
-            <strong>{request.shareToken}</strong>
+          <div className="detail-field detail-field--token">
+            <div className="detail-field__header">
+              <p className="request-card__label">Share token</p>
+              <button
+                aria-label="Copy share token"
+                className="icon-button"
+                onClick={() => void copyShareToken(request.shareToken)}
+                type="button"
+              >
+                <span className="icon-copy" aria-hidden="true">
+                  <span />
+                  <span />
+                </span>
+              </button>
+            </div>
+            <strong className="token-value">{request.shareToken}</strong>
           </div>
         </div>
 

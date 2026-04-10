@@ -196,6 +196,19 @@ a {
   color: inherit;
 }
 
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  padding-top: 8px;
+}
+
+.checkbox-field input {
+  width: 18px;
+  height: 18px;
+}
+
 .primary-button,
 .primary-link,
 .link-button {
@@ -231,6 +244,12 @@ a {
   padding: 10px 14px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.9);
+}
+
+.success-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
 }
 
 .empty-state,
@@ -283,6 +302,73 @@ a {
   gap: 16px;
   margin-top: 24px;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.token-value {
+  display: block;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.detail-field__header {
+  margin-bottom: 6px;
+}
+
+.detail-field__header .request-card__label {
+  margin: 0;
+}
+
+.detail-field {
+  position: relative;
+}
+
+.detail-field--token {
+  padding-right: 36px;
+}
+
+.detail-field--token .icon-button {
+  position: absolute;
+  top: 0;
+  right: 2px;
+}
+
+.icon-button {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: white;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.icon-copy {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+
+.icon-copy span {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid #334155;
+  border-radius: 3px;
+  background: white;
+}
+
+.icon-copy span:first-child {
+  top: 3px;
+  left: 3px;
+}
+
+.icon-copy span:last-child {
+  top: 0;
+  left: 0;
 }
 
 .action-row {

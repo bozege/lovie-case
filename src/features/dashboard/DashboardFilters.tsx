@@ -1,8 +1,10 @@
 import type { RequestStatus } from "../../lib/types";
 
 type DashboardFiltersProps = {
+  includeSelfRequests: boolean;
   search: string;
   selectedStatus: "all" | RequestStatus;
+  onIncludeSelfRequestsChange: (value: boolean) => void;
   onSearchChange: (value: string) => void;
   onStatusChange: (value: "all" | RequestStatus) => void;
 };
@@ -17,8 +19,10 @@ const statusOptions: Array<"all" | RequestStatus> = [
 ];
 
 export function DashboardFilters({
+  includeSelfRequests,
   search,
   selectedStatus,
+  onIncludeSelfRequestsChange,
   onSearchChange,
   onStatusChange,
 }: DashboardFiltersProps) {
@@ -47,6 +51,15 @@ export function DashboardFilters({
             </option>
           ))}
         </select>
+      </label>
+
+      <label className="checkbox-field">
+        <input
+          checked={includeSelfRequests}
+          onChange={(event) => onIncludeSelfRequestsChange(event.target.checked)}
+          type="checkbox"
+        />
+        <span>Include self-sent requests in incoming list</span>
       </label>
     </div>
   );

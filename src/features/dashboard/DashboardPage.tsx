@@ -37,6 +37,7 @@ export function DashboardPage() {
   const { email, userId, isAuthenticated, isLoading } = useAuth();
   const [outgoingRequests, setOutgoingRequests] = useState<PaymentRequest[]>([]);
   const [incomingRequests, setIncomingRequests] = useState<PaymentRequest[]>([]);
+  const [includeSelfRequests, setIncludeSelfRequests] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<"all" | RequestStatus>("all");
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +66,7 @@ export function DashboardPage() {
 
         if (!cancelled) {
           setOutgoingRequests(outgoing);
-          setIncomingRequests(incoming.filter((request) => request.senderEmail !== senderEmail));
+          setIncomingRequests(incoming);
         }
       } catch (loadError) {
         if (!cancelled) {
@@ -95,7 +96,7 @@ export function DashboardPage() {
     search,
     selectedStatus,
     role: "incoming",
-  });
+  }).filter((request) => includeSelfRequests || request.senderEmail !== email);
 
   return (
     <section className="dashboard-stack">
@@ -137,6 +138,8 @@ export function DashboardPage() {
         </div>
 
         <DashboardFilters
+          includeSelfRequests={includeSelfRequests}
+          onIncludeSelfRequestsChange={setIncludeSelfRequests}
           onSearchChange={setSearch}
           onStatusChange={setSelectedStatus}
           search={search}

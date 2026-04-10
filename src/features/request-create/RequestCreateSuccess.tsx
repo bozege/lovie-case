@@ -22,9 +22,11 @@ export function RequestCreateSuccess({ shareToken }: RequestCreateSuccessProps) 
         <input readOnly value={shareUrl} />
       </label>
 
-      <button className="primary-button" onClick={() => void copyLink()} type="button">
-        Copy link
-      </button>
+      <div className="success-actions">
+        <button className="primary-button" onClick={() => void copyLink()} type="button">
+          Copy link
+        </button>
+      </div>
     </section>
   );
 }
