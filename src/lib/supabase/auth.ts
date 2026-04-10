@@ -1,5 +1,7 @@
 import { supabase } from "./client";
 
+export { supabase };
+
 export async function sendMagicLink(email: string) {
   return supabase.auth.signInWithOtp({
     email,

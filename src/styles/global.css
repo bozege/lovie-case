@@ -42,6 +42,29 @@ a {
   margin-top: 28px;
 }
 
+.app-shell__account {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.app-shell__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.app-shell__nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #334155;
+}
+
+.app-shell__nav a.active {
+  color: #0369a1;
+}
+
 .app-shell__hint,
 .muted {
   color: #64748b;
@@ -62,6 +85,11 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+.dashboard-stack {
+  display: grid;
+  gap: 20px;
+}
+
 .panel {
   padding: 24px;
   border: 1px solid rgba(148, 163, 184, 0.25);
@@ -75,6 +103,36 @@ a {
   margin: 24px 0 0;
   font-size: 2rem;
   font-weight: 700;
+}
+
+.request-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.request-card {
+  display: block;
+  padding: 16px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  text-decoration: none;
+}
+
+.request-card__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.request-card__label {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
 }
 
 .status-badge {
@@ -97,6 +155,87 @@ a {
   color: #166534;
 }
 
+.form-panel {
+  max-width: 720px;
+}
+
+.stack-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: white;
+  font: inherit;
+  color: inherit;
+}
+
+.primary-button,
+.primary-link,
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.primary-button,
+.primary-link {
+  background: linear-gradient(135deg, #0284c7, #0f766e);
+  color: white;
+}
+
+.link-button {
+  padding: 0;
+  background: transparent;
+  color: #0369a1;
+}
+
+.account-chip {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.empty-state,
+.inline-note,
+.success-text,
+.error-text {
+  margin-top: 16px;
+}
+
+.success-text {
+  color: #166534;
+  font-weight: 600;
+}
+
+.error-text {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .app-shell {
     padding: 24px 16px 40px;
@@ -104,6 +243,14 @@ a {
 
   .app-shell__header,
   .panel__heading {
+    flex-direction: column;
+  }
+
+  .app-shell__account {
+    align-items: stretch;
+  }
+
+  .request-card__row {
     flex-direction: column;
   }
 }

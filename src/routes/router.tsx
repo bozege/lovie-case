@@ -1,12 +1,14 @@
+import type { ReactNode } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { AppProviders } from "../app/providers";
 import { AppShell } from "../app/AppShell";
+import { RequireAuth } from "../components/RequireAuth";
 import { AuthPage } from "../features/auth/AuthPage";
 import { DashboardPage } from "../features/dashboard/DashboardPage";
 import { RequestCreatePage } from "../features/request-create/RequestCreatePage";
 import { RequestDetailPage } from "../features/request-detail/RequestDetailPage";
 
-function withProviders(element: React.ReactNode) {
+function withProviders(element: ReactNode) {
   return <AppProviders>{element}</AppProviders>;
 }
 
@@ -24,12 +26,17 @@ export const router = createBrowserRouter([
         element: <AuthPage />,
       },
       {
-        path: "requests/new",
-        element: <RequestCreatePage />,
-      },
-      {
-        path: "requests/:requestId",
-        element: <RequestDetailPage />,
+        element: <RequireAuth />,
+        children: [
+          {
+            path: "requests/new",
+            element: <RequestCreatePage />,
+          },
+          {
+            path: "requests/:requestId",
+            element: <RequestDetailPage />,
+          },
+        ],
       },
     ],
   },
