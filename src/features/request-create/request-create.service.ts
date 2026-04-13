@@ -1,4 +1,5 @@
 import { supabase } from "../../lib/supabase/client";
+import { isE2eMode, upsertE2eRequest } from "../../lib/e2e-mode";
 import { parseAmountToMinorUnits } from "../../lib/money/amount";
 import { requestSchema } from "../../lib/validation/request";
 
@@ -38,6 +39,35 @@ export async function createPaymentRequest(input: CreateRequestInput) {
   }
 
   const shareToken = buildShareToken();
+  const now = new Date().toISOString();
+  const expiresAt = getExpiresAt();
+
+  if (isE2eMode) {
+    upsertE2eRequest({
+      id: shareToken,
+      senderUserId: input.senderUserId,
+      senderEmail: input.senderEmail,
+      recipientContact: parsed.data.recipientContact,
+      recipientUserId: null,
+      amountMinor,
+      currency: "USD",
+      note: parsed.data.note?.trim() || null,
+      status: "pending",
+      shareToken,
+      createdAt: now,
+      updatedAt: now,
+      expiresAt,
+      paidAt: null,
+      declinedAt: null,
+      canceledAt: null,
+    });
+
+    return {
+      id: shareToken,
+      shareToken,
+      amountMinor,
+    };
+  }
 
   const { data, error } = await supabase
     .from("payment_requests")
@@ -51,7 +81,7 @@ export async function createPaymentRequest(input: CreateRequestInput) {
       note: parsed.data.note?.trim() || null,
       status: "pending",
       share_token: shareToken,
-      expires_at: getExpiresAt(),
+      expires_at: expiresAt,
     })
     .select("id, share_token")
     .single();

@@ -1,4 +1,5 @@
 import { supabase } from "../../lib/supabase/client";
+import { isE2eMode, readE2eRequests, writeE2eRequests } from "../../lib/e2e-mode";
 import { getEffectiveStatus, isExpired } from "../../lib/request-status";
 import type { PaymentRequest, RequestStatus } from "../../lib/types";
 
@@ -60,6 +61,14 @@ async function reconcileExpiredRequests(rows: PaymentRequestRow[]) {
 }
 
 export async function listOutgoingRequests(senderEmail: string) {
+  if (isE2eMode) {
+    const requests = readE2eRequests();
+    writeE2eRequests(requests);
+    return requests
+      .filter((request) => request.senderEmail === senderEmail)
+      .sort((first, second) => Date.parse(second.createdAt) - Date.parse(first.createdAt));
+  }
+
   const { data, error } = await supabase
     .from("payment_requests")
     .select("*")
@@ -76,6 +85,17 @@ export async function listOutgoingRequests(senderEmail: string) {
 }
 
 export async function listIncomingRequests(email: string, userId: string) {
+  if (isE2eMode) {
+    const requests = readE2eRequests();
+    writeE2eRequests(requests);
+    return requests
+      .filter(
+        (request) =>
+          request.recipientContact === email || request.recipientUserId === userId
+      )
+      .sort((first, second) => Date.parse(second.createdAt) - Date.parse(first.createdAt));
+  }
+
   const { data, error } = await supabase
     .from("payment_requests")
     .select("*")
@@ -92,6 +112,18 @@ export async function listIncomingRequests(email: string, userId: string) {
 }
 
 export async function getRequestByShareToken(shareToken: string) {
+  if (isE2eMode) {
+    const requests = readE2eRequests();
+    writeE2eRequests(requests);
+    const request = requests.find((item) => item.shareToken === shareToken);
+
+    if (!request) {
+      throw new Error("Request not found");
+    }
+
+    return request;
+  }
+
   const { data, error } = await supabase
     .from("payment_requests")
     .select("*")

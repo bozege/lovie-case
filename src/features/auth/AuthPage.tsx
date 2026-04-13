@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../app/auth-context";
+import { isE2eMode, writeE2eSession } from "../../lib/e2e-mode";
 import { sendMagicLink } from "../../lib/supabase/auth";
 
 export function AuthPage() {
-  const { email, isAuthenticated } = useAuth();
+  const { email, isAuthenticated, refreshSession } = useAuth();
   const location = useLocation();
   const [address, setAddress] = useState(email ?? "");
   const [message, setMessage] = useState<string | null>(null);
@@ -23,6 +24,14 @@ export function AuthPage() {
     setError(null);
     setMessage(null);
     setIsSubmitting(true);
+
+    if (isE2eMode) {
+      writeE2eSession(address.trim());
+      await refreshSession();
+      setMessage("E2E test session started.");
+      setIsSubmitting(false);
+      return;
+    }
 
     const { error: signInError } = await sendMagicLink(address.trim());
 

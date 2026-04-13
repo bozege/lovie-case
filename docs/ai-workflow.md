@@ -137,6 +137,19 @@ This file captures representative prompts and AI-assisted workflow notes used to
 - Empty states improved when filters return no matches
 - Request detail messaging improved for expired, paid, declined, and canceled states
 
+### 10. Automated Testing and Recording
+
+**Prompt intent**: Add assignment-ready automated coverage and make the screen recording requirement deterministic.
+
+**Representative prompt**:
+> Alright lets go with step 10
+
+**Outcome**:
+- Unit tests added for money parsing, validation, status transitions, and filtering
+- Playwright E2E tests added for auth entry, request creation, dashboard filtering, payment, decline, and expired-request behavior
+- E2E-only localStorage mode added so tests can run without relying on live email magic links or mutable Supabase data
+- Playwright video recording verified through generated `video.webm` artifacts under `test-results/e2e`
+
 ## Notes on AI Process
 
 - AI was used as a structured implementation partner, not as a blind code generator.

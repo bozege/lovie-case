@@ -1,4 +1,5 @@
 import { supabase } from "../../lib/supabase/client";
+import { isE2eMode, updateE2eRequest } from "../../lib/e2e-mode";
 import { canCancel, canResolve } from "../../lib/request-status";
 import type { PaymentRequest } from "../../lib/types";
 
@@ -27,6 +28,17 @@ async function updateStatus(
 
   if (nextStatus === "canceled") {
     updates.canceled_at = timestamp;
+  }
+
+  if (isE2eMode) {
+    updateE2eRequest(requestId, {
+      status: nextStatus,
+      updatedAt: timestamp,
+      paidAt: nextStatus === "paid" ? timestamp : null,
+      declinedAt: nextStatus === "declined" ? timestamp : null,
+      canceledAt: nextStatus === "canceled" ? timestamp : null,
+    });
+    return;
   }
 
   const { error } = await supabase
