@@ -150,6 +150,18 @@ This file captures representative prompts and AI-assisted workflow notes used to
 - E2E-only localStorage mode added so tests can run without relying on live email magic links or mutable Supabase data
 - Playwright video recording verified through generated `video.webm` artifacts under `test-results/e2e`
 
+### 11. Submission Documentation
+
+**Prompt intent**: Turn the completed implementation and test setup into reviewer-friendly documentation.
+
+**Representative prompt**:
+> Alright lets continue with step 11
+
+**Outcome**:
+- README expanded with setup, Supabase, testing, video, architecture, Spec-Kit, assumptions, and AI usage sections
+- Submission note draft added for final handoff
+- Prototype tradeoffs documented, including self-sent request support and the Supabase BaaS architecture choice
+
 ## Notes on AI Process
 
 - AI was used as a structured implementation partner, not as a blind code generator.

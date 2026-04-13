@@ -18,3 +18,40 @@ create table if not exists public.payment_requests (
   constraint payment_requests_status_check
     check (status in ('pending', 'paid', 'declined', 'canceled', 'expired'))
 );
+
+alter table public.payment_requests enable row level security;
+
+create policy "Users can read their own payment requests"
+  on public.payment_requests
+  for select
+  to authenticated
+  using (
+    sender_user_id = auth.uid()
+    or recipient_user_id = auth.uid()
+    or recipient_contact = auth.jwt() ->> 'email'
+  );
+
+create policy "Users can create outgoing payment requests"
+  on public.payment_requests
+  for insert
+  to authenticated
+  with check (
+    sender_user_id = auth.uid()
+    and sender_email = auth.jwt() ->> 'email'
+    and status = 'pending'
+  );
+
+create policy "Participants can update request lifecycle status"
+  on public.payment_requests
+  for update
+  to authenticated
+  using (
+    sender_user_id = auth.uid()
+    or recipient_user_id = auth.uid()
+    or recipient_contact = auth.jwt() ->> 'email'
+  )
+  with check (
+    sender_user_id = auth.uid()
+    or recipient_user_id = auth.uid()
+    or recipient_contact = auth.jwt() ->> 'email'
+  );
