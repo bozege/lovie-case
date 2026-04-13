@@ -7,7 +7,7 @@ Lovie Case is a peer-to-peer payment request MVP. A user can sign in with email,
 ## What To Submit
 
 - Public GitHub repository: https://github.com/bozege/lovie-case
-- Live demo URL: pending deployment
+- Live demo URL: https://lovie-case.vercel.app
 - README with setup, Supabase, test, video, architecture, and AI workflow instructions
 - Spec-Kit artifacts under `specs/001-p2p-payment-request`
 - Automated E2E tests under `tests/e2e`

@@ -5,7 +5,7 @@ Peer-to-peer payment request MVP built for the Lovie first interview assignment.
 ## Links
 
 - GitHub repository: [bozege/lovie-case](https://github.com/bozege/lovie-case)
-- Live demo: pending Step 12 deployment
+- Live demo: [https://lovie-case.vercel.app](https://lovie-case.vercel.app)
 - Spec-Kit feature docs: [`specs/001-p2p-payment-request`](./specs/001-p2p-payment-request)
 - AI workflow log: [`docs/ai-workflow.md`](./docs/ai-workflow.md)
 
@@ -74,7 +74,7 @@ Create a Supabase project and enable email auth:
 2. Ensure `Email` is enabled.
 3. Go to auth URL settings.
 4. Add local redirect URLs such as `http://localhost:5173` and `http://127.0.0.1:5173`.
-5. After deployment, add the production URL as an allowed redirect URL too.
+5. After deployment, add `https://lovie-case.vercel.app` as an allowed redirect URL too.
 
 Run the SQL in:
 
