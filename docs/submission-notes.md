@@ -11,7 +11,7 @@ Lovie Case is a peer-to-peer payment request MVP. A user can sign in with email,
 - README with setup, Supabase, test, video, architecture, and AI workflow instructions
 - Spec-Kit artifacts under `specs/001-p2p-payment-request`
 - Automated E2E tests under `tests/e2e`
-- Generated Playwright videos from `test-results/e2e/**/video.webm`
+- Generated Playwright videos under `docs/e2e-recordings`
 
 ## Suggested Cover Note
 

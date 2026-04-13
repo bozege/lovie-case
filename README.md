@@ -8,6 +8,7 @@ Peer-to-peer payment request MVP built for the Lovie first interview assignment.
 - Live demo: [https://lovie-case.vercel.app](https://lovie-case.vercel.app)
 - Spec-Kit feature docs: [`specs/001-p2p-payment-request`](./specs/001-p2p-payment-request)
 - AI workflow log: [`docs/ai-workflow.md`](./docs/ai-workflow.md)
+- E2E recordings: [`docs/e2e-recordings`](./docs/e2e-recordings)
 
 ## What It Does
 
@@ -114,6 +115,15 @@ Playwright video recording is enabled in [`playwright.config.ts`](./playwright.c
 ```text
 test-results/e2e/**/video.webm
 ```
+
+Representative generated recordings are committed under [`docs/e2e-recordings`](./docs/e2e-recordings):
+
+- [`auth-entry.webm`](./docs/e2e-recordings/auth-entry.webm)
+- [`request-creation.webm`](./docs/e2e-recordings/request-creation.webm)
+- [`dashboard-filters.webm`](./docs/e2e-recordings/dashboard-filters.webm)
+- [`payment-simulation.webm`](./docs/e2e-recordings/payment-simulation.webm)
+- [`decline-flow.webm`](./docs/e2e-recordings/decline-flow.webm)
+- [`expired-request.webm`](./docs/e2e-recordings/expired-request.webm)
 
 The E2E suite runs in `VITE_E2E_MODE=true`, which uses browser `localStorage` instead of live magic-link email delivery or mutable Supabase data. This keeps the automated suite deterministic while the normal app still uses Supabase in development and production.
 
